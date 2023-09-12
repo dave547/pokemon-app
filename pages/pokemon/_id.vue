@@ -1,59 +1,75 @@
 <template>
-    <div>
+  <div>
+    <div class="pokemon-container">
+      <!-- Display image -->
+      <img :src="spriteUrl" alt="Pokemon" />
       <h1>{{ pokemonData.name }}</h1>
       <p>Height: {{ pokemonData.height }}</p>
       <p>Weight: {{ pokemonData.weight }}</p>
-  
-      <!-- Display image -->
-      <img :src="constructImageUrl(pokemonData.name)" alt="Pokemon" />
-  
+
       <!-- Display formatted abilities -->
       <div v-if="formattedAbilities">
         <h2>Abilities:</h2>
         <p>{{ formattedAbilities }}</p>
       </div>
+
+      <nuxt-link to="/">Back to Pokemon Search</nuxt-link>
     </div>
-  </template>
-  
-  <script>
-  import { fetchPokemonById } from '~/api/pokemonApi'; // Adjust the import path
-  
-  export default {
-    async asyncData({ params }) {
-      const { id } = params;
+  </div>
+</template>
+
+<script>
+import { fetchPokemonById } from '~/api/pokemonApi';
+
+const getPokemonSprite = async (pokemonName) => {
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+    if (response.ok) {
+      const data = await response.json();
+      const spriteUrl = data.sprites.front_default;
+      return spriteUrl;
+    } else {
+      console.error('Failed to fetch Pokémon data');
+      return null;
+    }
+  } catch (error) {
+    console.error('Failed to fetch Pokémon data:', error);
+    return null;
+  }
+};
+
+export default {
+  async asyncData({ params }) {
+    const { id } = params;
+    try {
       // Fetch Pokémon details using the 'id' parameter
       const pokemonData = await fetchPokemonById(id);
-      return { pokemonData };
+      // Fetch the sprite URL using the Pokémon's name
+      const spriteUrl = await getPokemonSprite(pokemonData.name);
+      return { pokemonData, spriteUrl };
+    } catch (error) {
+      console.error('Failed to fetch Pokémon details:', error);
+      return { pokemonData: null, spriteUrl: null };
+    }
+  },
+  computed: {
+    formattedAbilities() {
+      // Check if abilities are available
+      if (this.pokemonData && this.pokemonData.abilities.length > 0) {
+        // Capitalize the first letter of each ability and join them with commas
+        return this.pokemonData.abilities
+          .map((ability) => ability.charAt(0).toUpperCase() + ability.slice(1))
+          .join(', ');
+      } else {
+        return ''; // Return an empty string if there are no abilities
+      }
     },
-    computed: {
-      formattedAbilities() {
-        // Check if abilities are available
-        if (this.pokemonData.abilities.length > 0) {
-          // Capitalize the first letter of each ability and join them with commas
-          return this.pokemonData.abilities
-            .map((ability) => ability.charAt(0).toUpperCase() + ability.slice(1))
-            .join(', ');
-        } else {
-          return ''; // Return an empty string if there are no abilities
-        }
-      },
-    },
-    methods: {
-      constructImageUrl(pokemonName) {
-        // Define the base URL for Pokémon images (adjust the URL as needed)
-        const baseUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
-        // Construct the full image URL based on the Pokémon's name
-        return `${baseUrl}${pokemonName.toLowerCase()}.png`;
-      },
-    },
-  };
-  </script>
-  
-  
-  
+  },
+};
+</script>
 
 <style>
-.pokemon-containter {
+.pokemon-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,6 +77,7 @@
   max-width: 960px;
   margin: 20px auto;
   padding: 20px;
+  border-radius: 8px;;
   h1{
     color: #000;
   }

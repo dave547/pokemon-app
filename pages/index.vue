@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <header>
       <h1>Pokémon List</h1>
       <PokemonSearch v-model="searchQuery" />
@@ -70,6 +70,10 @@ export default {
 html, body {
   font-family: sans-serif;
   background: linear-gradient(to bottom, #6441A5, #2a0845);
+}
+.container{
+  max-width: 960px;
+  margin: 1rem auto; 
 }
 
 header {
