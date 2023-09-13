@@ -35,7 +35,7 @@ export async function fetchPokemonById(id) {
 // Function to fetch a list of Pokémon
 export async function fetchPokemonList() {
   try {
-    const url = `${BASE_URL}/pokemon?limit=60`; // You can adjust the limit as needed
+    const url = `${BASE_URL}/pokemon?limit=60`; 
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -50,7 +50,7 @@ export async function fetchPokemonList() {
     }
 
     const pokemonList = data.results.map((pokemon) => ({
-      id: extractIdFromUrl(pokemon.url), // You need to implement extractIdFromUrl
+      id: extractIdFromUrl(pokemon.url), 
       name: pokemon.name,
     }));
 
