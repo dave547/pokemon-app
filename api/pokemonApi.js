@@ -18,7 +18,7 @@ export async function fetchPokemonById(id) {
 
     const data = await response.json();
 
-    // console.log('API Data:', data);
+    console.log('API Data:', data);
 
     // Check if the expected data structure is present
     if (!data || !data.name || !data.height || !data.weight || !data.abilities) {
