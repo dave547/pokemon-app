@@ -1,4 +1,5 @@
-import { fetchPokemonById } from './api/pokemonApi';
+// import { fetchPokemonById } from './api/pokemonApi';
+import { fetchPokemonList } from './api/pokemonApi';
 
 export default {
   target: 'static', // default is 'server'
@@ -38,12 +39,16 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 
-   // Router config
+  // Router config
   generate: {
     routes: async () => {
-      // Fetch a list of Pokémon and generate routes for each one
-      const pokemonList = await fetchPokemonById(); // Define fetchPokemonById() to fetch the list of Pokémon
-      return pokemonList.map((pokemon) => `${pokemon.id}`);
+      try {
+        const pokemonList = await fetchPokemonList();
+        return pokemonList.map((pokemon) => `/pokemon/${pokemon.id}`);
+      } catch (error) {
+        console.error('Failed to fetch Pokémon list:', error);
+        return [];
+      }
     },
   },
 };
