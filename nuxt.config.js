@@ -1,3 +1,5 @@
+import { fetchPokemonById } from './api/pokemonApi';
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -39,7 +41,7 @@ export default {
   generate: {
     routes: async () => {
       // Fetch a list of Pokémon and generate routes for each one
-      const pokemonList = await fetchPokemonById(id); // Define fetchPokemonById() to fetch the list of Pokémon
+      const pokemonList = await fetchPokemonById(); // Define fetchPokemonById() to fetch the list of Pokémon
       return pokemonList.map((pokemon) => `${pokemon.id}`);
     },
   },

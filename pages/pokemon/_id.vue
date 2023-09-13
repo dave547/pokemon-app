@@ -21,6 +21,7 @@
 <script>
 import { fetchPokemonById } from '~/api/pokemonApi';
 
+
 const getPokemonSprite = async (pokemonName) => {
   try {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
@@ -48,7 +49,7 @@ export default {
       const spriteUrl = await getPokemonSprite(pokemonData.name);
       return { pokemonData, spriteUrl };
     } catch (error) {
-      console.error('Failed to fetch Pokémon details:', error);
+      console.error('Failed to fetch Pokémon details _id.vue:', error);
       return { pokemonData: null, spriteUrl: null };
     }
   },
