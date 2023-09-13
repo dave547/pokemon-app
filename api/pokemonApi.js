@@ -1,8 +1,3 @@
-// pokemonApi.js
-
-// Import any necessary dependencies, such as Axios or Fetch
-// Import other utility functions if needed
-
 // Define the base URL of the Pokémon API
 const BASE_URL = 'https://pokeapi.co/api/v2';
 
